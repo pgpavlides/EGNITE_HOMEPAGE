@@ -7,7 +7,7 @@ import { MeshStandardMaterial } from 'three';
 import gsap from 'gsap';
 
 
-const material = new MeshStandardMaterial({ color: 0xF2F3F5 });
+const material = new MeshStandardMaterial({ color: 0x000000 });
 
 
 
@@ -113,23 +113,23 @@ useEffect(() => {
     <>
       <mesh ref={modelRef}position={[4, 2, 0]} >
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="white" wireframe  />
+        <meshStandardMaterial color="black" wireframe  />
       </mesh>
       <mesh ref={modelRef2} position={[-2.6, 2.5, 0]} >
       <octahedronGeometry args={[0.5 , 0]} />
-        <meshStandardMaterial color="white" wireframe  />
+        <meshStandardMaterial color="black" wireframe  />
       </mesh>
       <mesh ref={modelRef3} position={[-5, -2, 0]} >
       <coneGeometry args={[0.2, 0.5, 8]} />
-        <meshStandardMaterial color="white" wireframe  />
+        <meshStandardMaterial color="black" wireframe  />
       </mesh>
       <mesh ref={modelRef4} position={[4.5, -1, 0]} >
       <coneGeometry args={[0.2, 0.5, 8]} />
-        <meshStandardMaterial color="white" wireframe  />
+        <meshStandardMaterial color="black" wireframe  />
       </mesh>
       <mesh position={[-5, -2, 0]} >
       <torusKnotGeometry args={[10, 3, 100, 16]} />
-        <meshStandardMaterial color="white" wireframe  transparent opacity={0.1} />
+        <meshStandardMaterial color="black" wireframe  transparent opacity={0.1} />
       </mesh>
     </>
   )
