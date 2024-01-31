@@ -11,8 +11,6 @@ const modelRef = useRef();
 const modelRef2 = useRef();
 const modelRef3 = useRef();
 const modelRef4 = useRef();
-const torusref = useRef();
-
 
 useEffect(() => {
   console.log('test');
@@ -20,14 +18,12 @@ useEffect(() => {
 
 useFrame(() => {
   // You can apply any animation logic here
-  modelRef.current.rotation.x += 0.001;
-  modelRef2.current.rotation.y += 0.002;
-  modelRef3.current.rotation.z += 0.003;
-  modelRef4.current.rotation.x += 0.001;
-  modelRef4.current.rotation.y += 0.002;
-  modelRef4.current.rotation.z += 0.003;
-  torusref.current.rotation.z += 0.0005;
-
+  modelRef.current.rotation.x += 0.01;
+  modelRef2.current.rotation.y += 0.02;
+  modelRef3.current.rotation.z += 0.03;
+  modelRef4.current.rotation.x += 0.01;
+  modelRef4.current.rotation.y += 0.02;
+  modelRef4.current.rotation.z += 0.03;
 });
 
 
@@ -49,7 +45,7 @@ useFrame(() => {
       <coneGeometry args={[0.2, 0.5, 8]} />
         <meshStandardMaterial color="black" wireframe  />
       </mesh>
-      <mesh ref={torusref} position={[-5, -2, 0]} >
+      <mesh position={[-5, -2, 0]} >
       <torusKnotGeometry args={[10, 3, 100, 16]} />
         <meshStandardMaterial color="black" wireframe  transparent opacity={0.1} />
       </mesh>

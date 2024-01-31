@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Canvas, useLoader, useFrame } from '@react-three/fiber';
+import { Canvas, useLoader } from '@react-three/fiber';
 import { CameraControls,useGLTF } from '@react-three/drei';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'; // Import GLTFLoader
 import { MeshStandardMaterial } from 'three';
 import gsap from 'gsap';
+
+
+
+
+
 
 export function ExtraModels(props) {
 
@@ -11,25 +16,8 @@ const modelRef = useRef();
 const modelRef2 = useRef();
 const modelRef3 = useRef();
 const modelRef4 = useRef();
-const torusref = useRef();
 
-
-useEffect(() => {
-  console.log('test');
-}, []);
-
-useFrame(() => {
-  // You can apply any animation logic here
-  modelRef.current.rotation.x += 0.001;
-  modelRef2.current.rotation.y += 0.002;
-  modelRef3.current.rotation.z += 0.003;
-  modelRef4.current.rotation.x += 0.001;
-  modelRef4.current.rotation.y += 0.002;
-  modelRef4.current.rotation.z += 0.003;
-  torusref.current.rotation.z += 0.0005;
-
-});
-
+  
 
   return (
     <>
@@ -49,13 +37,14 @@ useFrame(() => {
       <coneGeometry args={[0.2, 0.5, 8]} />
         <meshStandardMaterial color="black" wireframe  />
       </mesh>
-      <mesh ref={torusref} position={[-5, -2, 0]} >
+      <mesh position={[-5, -2, 0]} >
       <torusKnotGeometry args={[10, 3, 100, 16]} />
         <meshStandardMaterial color="black" wireframe  transparent opacity={0.1} />
       </mesh>
     </>
   )
 }
+
 
 
 
