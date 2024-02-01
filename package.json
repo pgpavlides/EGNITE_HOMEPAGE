@@ -8,9 +8,9 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
-    
   },
   "dependencies": {
+    "@react-spring/three": "^9.7.3",
     "@react-spring/web": "^9.7.3",
     "@react-three/drei": "^9.84.3",
     "@react-three/fiber": "^8.14.3",

@@ -1,7 +1,15 @@
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
-import { CameraControls, useGLTF } from "@react-three/drei";
+import { CameraControls, useGLTF, MeshDistortMaterial } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { useSpring, animated } from '@react-spring/three'
+
+const getDeviceType = () => {
+  if (window.innerWidth < 768) return "mobile";
+  else if (window.innerWidth >= 768 && window.innerWidth < 1024)
+    return "tablet";
+  else return "desktop";
+};
 
 export function ExtraModels(props) {
   const modelRef = useRef();
@@ -9,6 +17,8 @@ export function ExtraModels(props) {
   const modelRef3 = useRef();
   const modelRef4 = useRef();
   const torusref = useRef();
+
+  
 
   useFrame(() => {
     modelRef.current.rotation.x += 0.001;
@@ -51,6 +61,34 @@ export function ExtraModels(props) {
   );
 }
 
+const AnimatedCustomSphere = () => {
+
+  const AnimatedMeshDistortMaterial = animated(MeshDistortMaterial)
+
+  const [clicked, setClicked] = useState(false)
+  const [clicked2, setClicked2] = useState(false)
+
+
+  const springs = useSpring({
+    color: clicked ? '#569AFF' : '#3DB7B1',
+    scale: clicked2 ? 1 : 2, 
+  })
+
+  const handleClick = () => setClicked(s => !s)
+
+  return (
+    <mesh onClick={handleClick} position={[0, 0, -3]} scale={springs.scale}>
+      <sphereGeometry args={[2.5, 64, 32]}   />
+      <AnimatedMeshDistortMaterial
+        speed={2}
+        distort={0.5}
+        color={springs.color}
+        
+      />
+    </mesh>
+  )
+}
+
 function Model() {
 
   const { camera } = useThree()
@@ -63,12 +101,7 @@ function Model() {
 function ModelScene() {
 
 
-  const getDeviceType = () => {
-    if (window.innerWidth < 768) return "mobile";
-    else if (window.innerWidth >= 768 && window.innerWidth < 1024)
-      return "tablet";
-    else return "desktop";
-  };
+  
 
   const cameraControlsRef = useRef();
 
@@ -111,6 +144,10 @@ function ModelScene() {
           cameraControlsRef.current.mouseButtons.middle = 0;
           cameraControlsRef.current.touches.one = 0;
           cameraControlsRef.current.touches.two = 1;
+          cameraControlsRef.current.touches.three = 0;
+
+          cameraControlsRef.current.setPosition(0, 0, 10);
+
           break;
         default:
           break;
@@ -118,18 +155,23 @@ function ModelScene() {
     };
 
     // Slight delay to ensure camera controls are fully initialized
-    const timer = setTimeout(applySettings, 200); // 100 ms delay
+    const timer = setTimeout(applySettings, 1200); // 100 ms delay
 
     return () => clearTimeout(timer);
   }, [deviceType]);
 
   return (
+    <>
+
     <Canvas>
-      <CameraControls ref={cameraControlsRef} />
+    <AnimatedCustomSphere/>
+
+      <CameraControls ref={cameraControlsRef} makeDefault />
       <ambientLight intensity={5} />
       <ExtraModels />
       <Model />
     </Canvas>
+    </>
   );
 }
 
