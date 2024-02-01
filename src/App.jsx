@@ -10,7 +10,9 @@ import {
   CameraControls,
   useGLTF,
   MeshDistortMaterial,
+  MeshWobbleMaterial,
 } from "@react-three/drei";
+
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useSpring, animated, a, config } from "@react-spring/three";
 
@@ -25,9 +27,15 @@ export function ExtraModels() {
   const shapeanimations = useSpring({
     to: { scale: [1, 1, 1] },
     from: { scale: [0, 0, 0] },
-    config: { mass: 5, tension: 130, friction: 50, }, // Smoother transition
-});
+    config: { mass: 5, tension: 130, friction: 50, duration: 2000 },
+    delay: 2000, // Apply delay here, outside the config object
+  });
 
+  const shapeanimations2 = useSpring({
+    to: { scale: [1, 1, 1] },
+    from: { scale: [0, 0, 0] },
+    config: { mass: 5, tension: 130, friction: 50 },
+  });
 
   const modelRef = useRef();
   const modelRef2 = useRef();
@@ -49,7 +57,7 @@ export function ExtraModels() {
     <>
       <a.mesh scale={shapeanimations.scale} ref={modelRef} position={[4, 2, 0]}>
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="black" wireframe />
+        <MeshWobbleMaterial factor={1} speed={3} color={"black"} wireframe />
       </a.mesh>
       <a.mesh
         scale={shapeanimations.scale}
@@ -57,11 +65,15 @@ export function ExtraModels() {
         position={[-2.6, 2.5, 0]}
       >
         <octahedronGeometry args={[0.5, 0]} />
-        <meshStandardMaterial color="black" wireframe />
+        <MeshWobbleMaterial factor={1} speed={3} color={"black"} wireframe />
       </a.mesh>
-      <a.mesh scale={shapeanimations.scale} ref={modelRef3} position={[-5, -2, 0]}>
+      <a.mesh
+        scale={shapeanimations.scale}
+        ref={modelRef3}
+        position={[-5, -2, 0]}
+      >
         <coneGeometry args={[0.2, 0.5, 8]} />
-        <meshStandardMaterial color="black" wireframe />
+        <MeshWobbleMaterial factor={1} speed={3} color={"black"} wireframe />
       </a.mesh>
       <a.mesh
         scale={shapeanimations.scale}
@@ -69,12 +81,16 @@ export function ExtraModels() {
         position={[4.5, -1, 0]}
       >
         <coneGeometry args={[0.2, 0.5, 8]} />
-        <meshStandardMaterial color="black" wireframe />
+        <MeshWobbleMaterial factor={1} speed={3} color={"black"} wireframe />
       </a.mesh>
-      <a.mesh scale={shapeanimations.scale} ref={torusref} position={[-5, -2, 0]}>
+      <a.mesh
+        scale={shapeanimations2.scale}
+        ref={torusref}
+        position={[-5, -2, 0]}
+      >
         <torusKnotGeometry args={[10, 3, 100, 16]} />
         <meshStandardMaterial
-          scale={shapeanimations.scale}
+          scale={shapeanimations2.scale}
           color="black"
           wireframe
           transparent
@@ -226,14 +242,47 @@ function Model() {
   const baseDelay = 10; // milliseconds
   const delayIncrement = 450; // additional delay for each subsequent mesh
 
+  const [hovered, setHovered] = useState(false);
+
+  
   return (
     <group rotation={[1.5, 0, 0]} dispose={null}>
-      <AnimatedMesh geometry={nodes.E1.geometry} material={nodes.E1.material} position={[-2.159, 0.138, 0.012]} delay={baseDelay} />
-      <AnimatedMesh geometry={nodes.G.geometry} material={nodes.G.material} position={[-1.204, 0.063, 0.065]} delay={baseDelay + delayIncrement} />
-      <AnimatedMesh geometry={nodes.N.geometry} material={nodes.N.material} position={[-0.146, 0.277, 0.003]} delay={baseDelay + 2 * delayIncrement} />
-      <AnimatedMesh geometry={nodes.I.geometry} material={nodes.I.material} position={[0.526, 0.277, 0.037]} delay={baseDelay + 3 * delayIncrement} />
-      <AnimatedMesh geometry={nodes.T.geometry} material={nodes.T.material} position={[1.167, 0.127, -0.095]} delay={baseDelay + 4 * delayIncrement} />
-      <AnimatedMesh geometry={nodes.E2.geometry} material={nodes.E2.material} position={[2.127, 0.107, -0.068]} delay={baseDelay + 5 * delayIncrement} />
+      <AnimatedMesh
+        geometry={nodes.E1.geometry}
+        material={nodes.E1.material}
+        position={[-2.159, 0.138, 0.012]}
+        delay={baseDelay}
+      />
+      <AnimatedMesh
+        geometry={nodes.G.geometry}
+        material={nodes.G.material}
+        position={[-1.204, 0.063, 0.065]}
+        delay={baseDelay + delayIncrement}
+      />
+      <AnimatedMesh
+        geometry={nodes.N.geometry}
+        material={nodes.N.material}
+        position={[-0.146, 0.277, 0.003]}
+        delay={baseDelay + 2 * delayIncrement}
+      />
+      <AnimatedMesh
+        geometry={nodes.I.geometry}
+        material={nodes.I.material}
+        position={[0.526, 0.277, 0.037]}
+        delay={baseDelay + 3 * delayIncrement}
+      />
+      <AnimatedMesh
+        geometry={nodes.T.geometry}
+        material={nodes.T.material}
+        position={[1.167, 0.127, -0.095]}
+        delay={baseDelay + 4 * delayIncrement}
+      />
+      <AnimatedMesh
+        geometry={nodes.E2.geometry}
+        material={nodes.E2.material}
+        position={[2.127, 0.107, -0.068]}
+        delay={baseDelay + 5 * delayIncrement}
+      />
     </group>
   );
 }
@@ -241,13 +290,11 @@ function Model() {
 // Preload the model for performance
 useGLTF.preload("./EGNITE_LOGO.glb");
 
-function ModelScene({camera}) {
+function ModelScene({ camera }) {
   const cameraControlsRef = useRef();
 
   // Define breakpoints for device detection
   const [deviceType, setDeviceType] = useState(getDeviceType());
-
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -261,7 +308,6 @@ function ModelScene({camera}) {
 
   useEffect(() => {
     if (cameraControlsRef.current) {
-
     }
 
     const applySettings = () => {
@@ -277,7 +323,6 @@ function ModelScene({camera}) {
           cameraControlsRef.current.touches.one = 1;
           cameraControlsRef.current.touches.two = 0;
           cameraControlsRef.current.setPosition(0, 0, 6, true);
-
 
           break;
         case "tablet":
