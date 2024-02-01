@@ -224,7 +224,7 @@ function Model() {
 
   // Define base delay and increment for each mesh
   const baseDelay = 10; // milliseconds
-  const delayIncrement = 150; // additional delay for each subsequent mesh
+  const delayIncrement = 450; // additional delay for each subsequent mesh
 
   return (
     <group rotation={[1.5, 0, 0]} dispose={null}>
