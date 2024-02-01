@@ -241,7 +241,7 @@ function Model() {
 // Preload the model for performance
 useGLTF.preload("./EGNITE_LOGO.glb");
 
-function ModelScene({camera}) {
+function ModelScene() {
   const cameraControlsRef = useRef();
 
   // Define breakpoints for device detection
@@ -260,20 +260,13 @@ function ModelScene({camera}) {
   }, []); // Default to desktop
 
   useEffect(() => {
-    if (cameraControlsRef.current) {
-
-    }
-
     const applySettings = () => {
       if (!cameraControlsRef.current) return;
-
       switch (deviceType) {
         case "desktop":
           cameraControlsRef.current.mouseButtons.left = 1;
           cameraControlsRef.current.mouseButtons.right = 0;
           cameraControlsRef.current.mouseButtons.middle = 0;
-          cameraControlsRef.current.mouseButtons.wheel = 0;
-
           cameraControlsRef.current.touches.one = 1;
           cameraControlsRef.current.touches.two = 0;
           cameraControlsRef.current.setPosition(0, 0, 6, true);
@@ -284,8 +277,6 @@ function ModelScene({camera}) {
           cameraControlsRef.current.mouseButtons.left = 0;
           cameraControlsRef.current.mouseButtons.right = 0;
           cameraControlsRef.current.mouseButtons.middle = 0;
-          cameraControlsRef.current.mouseButtons.wheel = 0;
-
           cameraControlsRef.current.touches.one = 1;
           cameraControlsRef.current.touches.two = 3;
           break;
@@ -293,13 +284,11 @@ function ModelScene({camera}) {
           cameraControlsRef.current.mouseButtons.left = 1;
           cameraControlsRef.current.mouseButtons.right = 0;
           cameraControlsRef.current.mouseButtons.middle = 0;
-          cameraControlsRef.current.mouseButtons.wheel = 0;
-
           cameraControlsRef.current.touches.one = 0;
           cameraControlsRef.current.touches.two = 1;
           cameraControlsRef.current.touches.three = 0;
 
-          cameraControlsRef.current.setPosition(0, 0, 13, true);
+          cameraControlsRef.current.setPosition(0, 0, 10, true);
 
           break;
         default:
@@ -308,16 +297,17 @@ function ModelScene({camera}) {
     };
 
     // Slight delay to ensure camera controls are fully initialized
-    const timer = setTimeout(applySettings, 300); // 100 ms delay
+    const timer = setTimeout(applySettings, 200); // 100 ms delay
 
     return () => clearTimeout(timer);
   }, [deviceType]);
 
   return (
     <>
-      <Canvas shadows camera={{ position: [20, -5, -10], fov: 60 }}>
-        <CameraControls smoothTime={1.5} ref={cameraControlsRef} makeDefault />
+      <Canvas>
         {/* <AnimatedCustomSphere/> */}
+
+        <CameraControls ref={cameraControlsRef} makeDefault />
         <ambientLight intensity={5} />
         <ExtraModels />
         <Model />
