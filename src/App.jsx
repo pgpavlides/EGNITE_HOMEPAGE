@@ -289,8 +289,79 @@ function Model() {
 // Preload the model for performance
 useGLTF.preload("./EGNITE_LOGO.glb");
 
+function MyComponent() {
+  // Define the style object
+  const divStyle = {
+    width: '100vw',
+    height: '500px',
+    
+    top: 0,
+    left: 0,
+    zIndex: 1000,
+  };
+
+  return (
+    <>
+    <div id="uppercanvas" style={divStyle}>
+      wdaawedadw
+    </div>
+   
+  </>
+  );
+}
+
+
+/* 
+====================MODEL SCENE===================
+*/
+
 function ModelScene({ camera }) {
   const cameraControlsRef = useRef();
+  const canvasRef = useRef();
+  const [isMultiTouch, setIsMultiTouch] = useState(false);
+
+  const updateTouchAction = useCallback(() => {
+    const canvasElement = canvasRef.current;
+    if (!canvasElement) return;
+
+    const handleTouchStart = (e) => {
+      if (e.touches.length === 2) {
+        setIsMultiTouch(true);
+      }
+    };
+
+    const handleTouchEnd = (e) => {
+      if (e.touches.length < 2) {
+        setIsMultiTouch(false);
+      }
+    };
+
+    canvasElement.addEventListener('touchstart', handleTouchStart);
+    canvasElement.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      canvasElement.removeEventListener('touchstart', handleTouchStart);
+      canvasElement.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
+
+  useEffect(() => {
+    const canvasElement = canvasRef.current;
+    if (canvasElement) {
+      updateTouchAction();
+    }
+  }, [updateTouchAction]);
+
+  useEffect(() => {
+    // This effect updates the touch-action style based on isMultiTouch state
+    const canvasElement = canvasRef.current;
+    if (canvasElement) {
+      canvasElement.style.touchAction = isMultiTouch ? 'auto !important' : 'auto';
+      canvasElement.style.backgroundColor = isMultiTouch ? 'red' : 'green';
+    }
+  }, [isMultiTouch]);
+
+  
 
   // Define breakpoints for device detection
   const [deviceType, setDeviceType] = useState(getDeviceType());
@@ -304,6 +375,9 @@ function ModelScene({ camera }) {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []); // Default to desktop
+
+  
+  
 
   const applySettings = () => {
     const camera = cameraControlsRef.current;
@@ -334,6 +408,7 @@ function ModelScene({ camera }) {
                 camera.touches.one = 0;
                 camera.touches.two = 0;
                 camera.touches.three = 0;
+               
             camera.setPosition(0, 0, 13, true);
             break;
         // No position setting needed for tablet, or default case
@@ -346,6 +421,7 @@ function ModelScene({ camera }) {
                 camera.touches.one = 0;
                 camera.touches.two = 0;
                 camera.touches.three = 0;
+                camera.setPosition(0, 0, 13, true);
         default:
             // Optionally set a default position or leave as is for tablets and other devices
             break;
@@ -369,11 +445,12 @@ function ModelScene({ camera }) {
                 camera.mouseButtons.middle = 0;
                 camera.mouseButtons.wheel = 0;
 
-                camera.touches.one = 1;
-                camera.touches.two = 3;
+                camera.touches.one = 0;
+                camera.touches.two = 1;
+                camera.touches.three = 0;
                 break;
             case "mobile":
-                camera.mouseButtons.left = 1;
+                camera.mouseButtons.left = 0;
                 camera.mouseButtons.right = 0;
                 camera.mouseButtons.middle = 0;
                 camera.mouseButtons.wheel = 0;
@@ -393,7 +470,9 @@ function ModelScene({ camera }) {
                 camera.touches.three = 0;
                 break;
         }
-    }, 5000); // 5000 milliseconds delay
+    }, 5000); 
+    
+    // 5000 milliseconds delay
 };
 
 
@@ -402,7 +481,8 @@ function ModelScene({ camera }) {
 
   return (
     <>
-      <Canvas shadows camera={{ position: [20, -5, -10], fov: 60 }}>
+    <MyComponent/>
+      <Canvas ref={canvasRef} className="canvasmain" shadows camera={{ position: [20, -5, -10], fov: 60 }}>
         <CameraControls smoothTime={1.5} ref={cameraControlsRef} makeDefault />
         {/* <AnimatedCustomSphere/> */}
         <ambientLight intensity={5} />

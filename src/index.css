@@ -21,9 +21,18 @@ html,body,#basic-scene {
   padding: 0;
 }
 
+.canvasmain {
+  /* background-color: red; */
+  touch-action: auto !important;
+}
+
+#uppercanvas {
+  background-color: blue;
+}
+
 #basic-scene { 
-  position: fixed;
+
+  /* position: fixed;
   height: 100vh;
-  top: 0px;
-  overflow: hidden;
+  top: 0px; */
 }
