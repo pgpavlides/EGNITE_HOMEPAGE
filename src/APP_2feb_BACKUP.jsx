@@ -236,7 +236,7 @@ export function AnimatedMesh({ geometry, material, position, delay }) {
 }
 
 function Model() {
-  const { nodes } = useGLTF("./EGNITE_LOGO.glb");
+  const { nodes } = useGLTF("https://staginghello.grolives.com/wp-content/uploads/2024/02/EGNITE_LOGO.glb");
 
   // Define base delay and increment for each mesh
   const baseDelay = 10; // milliseconds
@@ -244,6 +244,7 @@ function Model() {
 
   const [hovered, setHovered] = useState(false);
 
+  
   return (
     <group rotation={[1.5, 0, 0]} dispose={null}>
       <AnimatedMesh
@@ -287,7 +288,7 @@ function Model() {
 }
 
 // Preload the model for performance
-useGLTF.preload("./EGNITE_LOGO.glb");
+useGLTF.preload("https://staginghello.grolives.com/wp-content/uploads/2024/02/EGNITE_LOGO.glb");
 
 function ModelScene({ camera }) {
   const cameraControlsRef = useRef();
@@ -305,100 +306,57 @@ function ModelScene({ camera }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []); // Default to desktop
 
-  const applySettings = () => {
-    const camera = cameraControlsRef.current;
-
-    if (!camera) return;
-
-    // First switch for setting the position based on deviceType
-    switch (deviceType) {
-
-      
-        case "desktop":
-          camera.mouseButtons.left = 0;
-                camera.mouseButtons.right = 0;
-                camera.mouseButtons.middle = 0;
-                camera.mouseButtons.wheel = 0;
-
-                camera.touches.one = 0;
-                camera.touches.two = 0;
-                camera.touches.three = 0;
-            camera.setPosition(0, 0, 6, true);
-            break;
-        case "mobile":
-          camera.mouseButtons.left = 0;
-                camera.mouseButtons.right = 0;
-                camera.mouseButtons.middle = 0;
-                camera.mouseButtons.wheel = 0;
-
-                camera.touches.one = 0;
-                camera.touches.two = 0;
-                camera.touches.three = 0;
-            camera.setPosition(0, 0, 13, true);
-            break;
-        // No position setting needed for tablet, or default case
-        case "tablet":
-          camera.mouseButtons.left = 0;
-                camera.mouseButtons.right = 0;
-                camera.mouseButtons.middle = 0;
-                camera.mouseButtons.wheel = 0;
-
-                camera.touches.one = 0;
-                camera.touches.two = 0;
-                camera.touches.three = 0;
-        default:
-            // Optionally set a default position or leave as is for tablets and other devices
-            break;
+  useEffect(() => {
+    if (cameraControlsRef.current) {
     }
 
-    // Delay the execution of the second switch statement for 5 seconds
-    setTimeout(() => {
-        switch (deviceType) {
-            case "desktop":
-                camera.mouseButtons.left = 1;
-                camera.mouseButtons.right = 0;
-                camera.mouseButtons.middle = 0;
-                camera.mouseButtons.wheel = 0;
+    const applySettings = () => {
+      if (!cameraControlsRef.current) return;
 
-                camera.touches.one = 1;
-                camera.touches.two = 0;
-                break;
-            case "tablet":
-                camera.mouseButtons.left = 0;
-                camera.mouseButtons.right = 0;
-                camera.mouseButtons.middle = 0;
-                camera.mouseButtons.wheel = 0;
+      switch (deviceType) {
+        case "desktop":
+          cameraControlsRef.current.mouseButtons.left = 1;
+          cameraControlsRef.current.mouseButtons.right = 0;
+          cameraControlsRef.current.mouseButtons.middle = 0;
+          cameraControlsRef.current.mouseButtons.wheel = 0;
 
-                camera.touches.one = 1;
-                camera.touches.two = 3;
-                break;
-            case "mobile":
-                camera.mouseButtons.left = 1;
-                camera.mouseButtons.right = 0;
-                camera.mouseButtons.middle = 0;
-                camera.mouseButtons.wheel = 0;
+          cameraControlsRef.current.touches.one = 1;
+          cameraControlsRef.current.touches.two = 0;
+          cameraControlsRef.current.setPosition(0, 0, 6, true);
 
-                camera.touches.one = 0;
-                camera.touches.two = 1;
-                camera.touches.three = 0;
-                break;
-            default:
-                camera.mouseButtons.left = 0;
-                camera.mouseButtons.right = 0;
-                camera.mouseButtons.middle = 0;
-                camera.mouseButtons.wheel = 0;
+          break;
+        case "tablet":
+          cameraControlsRef.current.mouseButtons.left = 0;
+          cameraControlsRef.current.mouseButtons.right = 0;
+          cameraControlsRef.current.mouseButtons.middle = 0;
+          cameraControlsRef.current.mouseButtons.wheel = 0;
 
-                camera.touches.one = 0;
-                camera.touches.two = 0;
-                camera.touches.three = 0;
-                break;
-        }
-    }, 5000); // 5000 milliseconds delay
-};
+          cameraControlsRef.current.touches.one = 1;
+          cameraControlsRef.current.touches.two = 3;
+          break;
+        case "mobile":
+          cameraControlsRef.current.mouseButtons.left = 1;
+          cameraControlsRef.current.mouseButtons.right = 0;
+          cameraControlsRef.current.mouseButtons.middle = 0;
+          cameraControlsRef.current.mouseButtons.wheel = 0;
 
+          cameraControlsRef.current.touches.one = 0;
+          cameraControlsRef.current.touches.two = 1;
+          cameraControlsRef.current.touches.three = 0;
 
-  // Slight delay to ensure camera controls are fully initialized
-  const timer = setTimeout(applySettings, 300); // 100 ms delay
+          cameraControlsRef.current.setPosition(0, 0, 13, true);
+
+          break;
+        default:
+          break;
+      }
+    };
+
+    // Slight delay to ensure camera controls are fully initialized
+    const timer = setTimeout(applySettings, 300); // 100 ms delay
+
+    return () => clearTimeout(timer);
+  }, [deviceType]);
 
   return (
     <>
