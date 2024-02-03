@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { Canvas } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
 
 import { ExtraModels } from "./ExtraModels";
@@ -15,44 +15,11 @@ const getDeviceType = () => {
 
 export function Experience({ camera }) {
   const cameraControlsRef = useRef();
-  const canvasRef = useRef();
-  const [isMultiTouch, setIsMultiTouch] = useState(false);
   const [controlsReady, setControlsReady] = useState(false);
   const [animationState, setAnimationState] = useState("starting");
-
-  const updateTouchAction = useCallback(() => {
-    const canvasElement = canvasRef.current;
-    if (!canvasElement) return;
-
-    const handleTouchStart = (e) => {
-      if (e.touches.length === 2) {
-        setIsMultiTouch(true);
-      }
-    };
-
-    const handleTouchEnd = (e) => {
-      if (e.touches.length < 2) {
-        setIsMultiTouch(false);
-      }
-    };
-
-    canvasElement.addEventListener("touchstart", handleTouchStart);
-    canvasElement.addEventListener("touchend", handleTouchEnd);
-
-    return () => {
-      canvasElement.removeEventListener("touchstart", handleTouchStart);
-      canvasElement.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, []);
-
-  useEffect(() => {
-    const canvasElement = canvasRef.current;
-    if (canvasElement) {
-      updateTouchAction();
-    }
-  }, [updateTouchAction]);
-
   const [deviceType, setDeviceType] = useState(getDeviceType());
+  const events = useThree(state => state.events);
+//   events.disconnect();
 
   useEffect(() => {
     const handleResize = () => {
@@ -169,33 +136,17 @@ export function Experience({ camera }) {
 
   useEffect(() => {
     if (controlsReady) {
-      // console.log('CONTROLS:',controlsReady);
-      // console.log(cameraControlsRef.current);
       applySettings();
     }
   }, [controlsReady]);
 
-  useEffect(() => {
-    if (animationState === "end") {
-      if (isMultiTouch) {
-        document.getElementsByClassName("canvasmain")[0].style.backgroundColor =
-          "purple";
-      } else {
-        document.getElementsByClassName("canvasmain")[0].style.backgroundColor =
-          "white";
-      }
-    }
-  }, [isMultiTouch, animationState]);
+ 
+
+//   const events = useThree((state) => state.events);
 
   return (
     <>
-      <MyComponent />
-      <Canvas
-        ref={canvasRef}
-        className="canvasmain"
-        shadows
-        camera={{ position: [20, -5, -10], fov: 60 }}
-      >
+     
         <CameraControls
           enabled={true}
           smoothTime={1.5}
@@ -205,7 +156,7 @@ export function Experience({ camera }) {
         <ambientLight intensity={5} />
         <ExtraModels />
         <Logo />
-      </Canvas>
+      
     </>
   );
 }

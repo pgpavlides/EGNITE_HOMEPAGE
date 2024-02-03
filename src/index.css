@@ -21,18 +21,13 @@ html,body,#basic-scene {
   padding: 0;
 }
 
-.canvasmain {
-  /* background-color: red; */
-  touch-action: auto !important;
+.canvasStyleDefault {
+  /* background: red; */
+  /* Assuming 'auto !important' is required for another rule to override, but here we just set 'auto' */
+  touch-action: pan-y !important;
 }
 
-#uppercanvas {
-  background-color: blue;
-}
-
-#basic-scene { 
-
-  /* position: fixed;
-  height: 100vh;
-  top: 0px; */
+.canvasStyleTwoTouches {
+  /* background: blue; */
+  touch-action: auto ; /* Directly setting 'auto' without !important, as we manage specificity through classes */
 }
