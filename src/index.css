@@ -23,7 +23,7 @@ html,body,#basic-scene {
 
 .canvasmain {
   /* background-color: red; */
-  touch-action: auto;
+  touch-action: auto !important;
 }
 
 #uppercanvas {
