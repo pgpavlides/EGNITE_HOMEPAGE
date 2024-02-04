@@ -14,12 +14,12 @@
   -webkit-text-size-adjust: 100%;
 }
 
-html,body,#basic-scene {
+/* html,body,#basic-scene {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
-}
+} */
 
 .canvasStyleDefault {
   /* background: red; */

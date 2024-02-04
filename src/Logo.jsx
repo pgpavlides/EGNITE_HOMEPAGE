@@ -25,7 +25,7 @@ function AnimatedMesh({ geometry, material, position, delay }) {
   }
   
  export function Logo() {
-    const { nodes } = useGLTF("https://staginghello.grolives.com/wp-content/uploads/2024/02/EGNITE_LOGO.glb");
+    const { nodes } = useGLTF("https://egnite.gr/wp-content/uploads/2024/02/EGNITE_LOGO.glb");
   
     // Define base delay and increment for each mesh
     const baseDelay = 10; // milliseconds
@@ -76,4 +76,4 @@ function AnimatedMesh({ geometry, material, position, delay }) {
   }
   
   // Preload the model for performance
-  useGLTF.preload("https://staginghello.grolives.com/wp-content/uploads/2024/02/EGNITE_LOGO.glb");
+  useGLTF.preload("https://egnite.gr/wp-content/uploads/2024/02/EGNITE_LOGO.glb");

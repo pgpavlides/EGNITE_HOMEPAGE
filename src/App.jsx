@@ -21,7 +21,7 @@ function App() {
 
   return (
     <>
-      <MyComponent />
+      {/* <MyComponent /> */}
       <Canvas
         onScroll={e => console.log('onScroll')}
         onTouchStart={handleTouchStart}
